@@ -1,20 +1,35 @@
 package main
 
 import (
-	"black-hat/shodan"
+	"black-hat/metasploit"
 	"fmt"
 	"log"
-	"strconv"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	apiInfo := shodan.New("<api-key>").APIInfo()
 
-	log.Println("Api-info plan: " + apiInfo.Plan)
-	log.Println("Api-info https: " + strconv.FormatBool(apiInfo.Https))
-	log.Println("Api-info queryCredits: " + fmt.Sprint(apiInfo.QueryCredits))
-	log.Println("Api-info scanCredits: " + fmt.Sprint(apiInfo.ScanCredits))
-	log.Println("Api-info telnet: " + strconv.FormatBool(apiInfo.Telnet))
-	log.Println("Api-info unlocked: " + strconv.FormatBool(apiInfo.Unlocked))
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	host := os.Getenv("MSF_HOST")
+	pass := os.Getenv("MSF_PASS")
+	user := "msf"
+
+	mts, err := metasploit.New(host, user, pass)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	sessions, err := mts.SessionList()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(sessions)
 
 }

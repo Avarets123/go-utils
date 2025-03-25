@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 )
 
+var path string = os.Getenv("PATH")
+
 func main() {
 
 	arguments := os.Args
@@ -15,30 +17,48 @@ func main() {
 		return
 	}
 
-	file := arguments[1]
+	files := arguments[1:]
 
-	path := os.Getenv("PATH")
+	filesExistsMap := map[string][]string{}
 
 	pathSplited := filepath.SplitList(path)
 
 	for _, dir := range pathSplited {
 
-		fullPath := filepath.Join(dir, file)
-
-		fileInfo, err := os.Stat(fullPath)
-
-		if err == nil {
-			mode := fileInfo.Mode()
-
-			if mode.IsRegular() {
-				if mode&0111 != 0 {
-					fmt.Println(fullPath)
-					return
-
-				}
+		for _, file := range files {
+			fPath := execIsExists(dir, file)
+			if fPath == "" {
+				continue
 			}
+
+			filesValue := filesExistsMap[file]
+			filesValue = append(filesValue, fPath)
+			filesExistsMap[file] = filesValue
+			continue
 		}
 
 	}
+
+	fmt.Println(filesExistsMap)
+
+}
+
+func execIsExists(dir, file string) string {
+	fullPath := filepath.Join(dir, file)
+
+	fileInfo, err := os.Stat(fullPath)
+
+	if err == nil {
+		mode := fileInfo.Mode()
+
+		if mode.IsRegular() {
+			if mode&0111 != 0 {
+				return fullPath
+
+			}
+		}
+	}
+
+	return ""
 
 }

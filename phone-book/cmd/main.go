@@ -8,6 +8,7 @@ import (
 	"path"
 	"phone-book/internal/entry"
 	"regexp"
+	"runtime"
 	"strings"
 )
 
@@ -32,6 +33,15 @@ func isValidHolder(card string) bool {
 	return regexp.MustCompile(`^[A-Z|a-z|А-Я|а-я]+$`).Match([]byte(card))
 }
 
+func systemLogs() {
+	fmt.Println(runtime.GOARCH)
+	fmt.Println(runtime.GOOS)
+	fmt.Println(runtime.Compiler)
+	fmt.Println(runtime.GOMAXPROCS(0))
+	fmt.Println(runtime.Version())
+	fmt.Println(runtime.NumCPU())
+}
+
 func isValidInput(input string) bool {
 	inpSlic := strings.Split(input, ",")
 
@@ -53,6 +63,7 @@ func isValidInput(input string) bool {
 
 func main() {
 
+	systemLogs()
 	// ch6.ReadLineByLine("data.csv")
 	// ch6.ReadWordByWord("data.csv")
 	// ch6.BufferedReadFile("data.csv", 105)

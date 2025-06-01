@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"phone-book/internal/entry"
+	"phone-book/pkg/ch7"
 	"regexp"
 	"runtime"
 	"strings"
@@ -40,6 +41,9 @@ func systemLogs() {
 	fmt.Println(runtime.GOMAXPROCS(0))
 	fmt.Println(runtime.Version())
 	fmt.Println(runtime.NumCPU())
+
+	fmt.Println(os.Hostname())
+
 }
 
 func isValidInput(input string) bool {
@@ -63,15 +67,11 @@ func isValidInput(input string) bool {
 
 func main() {
 
-	systemLogs()
-	// ch6.ReadLineByLine("data.csv")
-	// ch6.ReadWordByWord("data.csv")
-	// ch6.BufferedReadFile("data.csv", 105)
-	// ch6.WriteWithDifferentVariants()
-	// ch6.PrintEmb()
-	// fmt.Println(ch6.DirSize("/home/osman/Рабочий стол/workspace"))
+	// systemLogs()
 
-	// return
+	ch7.UseCtx()
+
+	return
 
 	args := os.Args
 

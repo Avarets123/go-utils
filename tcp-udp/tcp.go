@@ -26,7 +26,6 @@ func CreateServer() {
 		panic(err)
 	}
 	fmt.Println("Server listen tcp connections")
-	b := make([]byte, 1024)
 
 	for {
 		con, err := l.Accept()
@@ -35,21 +34,26 @@ func CreateServer() {
 		}
 
 		fmt.Println("New client connected!")
-
-		for {
-			n, _ := con.Read(b)
-			fmt.Println("S side: >>", string(b))
-			if strings.TrimSpace(string(b[0:n])) == "STOP" {
-				fmt.Println("Disconnect")
-				con.Close()
-				return
-			}
-
-			con.Write(b)
-		}
+		go HandleClientConn(con)
 
 	}
 
+}
+
+func HandleClientConn(con net.Conn) {
+	b := make([]byte, 1024)
+
+	for {
+		defer con.Close()
+		n, _ := con.Read(b)
+		fmt.Println("S side: >>", string(b))
+		if strings.TrimSpace(string(b[0:n])) == "STOP" {
+			fmt.Println("Disconnect")
+			con.Close()
+			return
+		}
+
+	}
 }
 
 func ConnecClient() {

@@ -37,6 +37,8 @@ func UseFanInFanOut(chCount int) {
 	fmt.Println("Before Heap inuse: ", m.HeapInuse/1024)
 	fmt.Println("Before Head alloc: ", m.HeapAlloc/1024)
 
+	fmt.Println("Before goroutines: ", runtime.NumGoroutine())
+
 	for range out {
 	}
 
@@ -45,6 +47,7 @@ func UseFanInFanOut(chCount int) {
 	runtime.ReadMemStats(&m)
 	fmt.Println("Final Heap inuse: ", m.HeapInuse/1024)
 	fmt.Println("Final Head alloc: ", m.HeapAlloc/1024)
+	fmt.Println("Final goroutines: ", runtime.NumGoroutine())
 
 	fmt.Println("Sinced: ", time.Since(start))
 
